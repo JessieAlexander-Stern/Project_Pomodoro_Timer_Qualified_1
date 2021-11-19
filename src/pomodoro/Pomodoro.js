@@ -51,6 +51,44 @@ function nextSession(focusDuration, breakDuration) {
   };
 }
 
+function playPause() {
+  setIsTimerRunning((prevState) => {
+    const nextState = !prevState;
+    
+    if (nextState) {
+      setSession((prevStateSession) => {
+        // If the timer is starting and the previous session is null,
+        // start a focusing session.
+        if (prevStateSession === null) {
+          setDisabled(false);
+          
+          return {
+            label: "Focusing",
+            timeRemaining: focusDuration * 60,
+          };
+        }
+        
+        return prevStateSession;
+      });
+    }
+    
+    return nextState;
+  });
+}
+
+useInterval(
+  () => {
+    if (session.timeRemaining === 0) {
+      new Audio("https://bigsoundbank.com/UPLOAD/mp3/1482.mp3").play();
+      return setSession(nextSession(focusDuration, breakDuration));
+    }
+    return setSession(nextTick);
+  },
+  isTimerRunning ? 1000 : null
+);
+
+
+
 function Pomodoro() {
   // Timer starts out paused
   const [isTimerRunning, setIsTimerRunning] = useState(false);
