@@ -66,20 +66,9 @@ function Pomodoro() {
    *
    * NOTE: You will not need to make changes to the callback function
    */
-  useInterval(
-    () => {
-      if (session.timeRemaining === 0) {
-        new Audio("https://bigsoundbank.com/UPLOAD/mp3/1482.mp3").play();
-        return setSession(nextSession(focusDuration, breakDuration));
-      }
-      return setSession(nextTick);
-    },
-    isTimerRunning ? 1000 : null
-  );
 
-  /**
-   * Called whenever the play/pause button is clicked.
-   */
+
+ 
   const [disabled, setDisabled] = useState(true);
 
 
@@ -90,26 +79,7 @@ function Pomodoro() {
     setIsTimerRunning(false);
   };
 
-  function playPause() {
-    setIsTimerRunning((prevState) => {
-      const nextState = !prevState;
-      if (nextState) {
-        setSession((prevStateSession) => {
-          // If the timer is starting and the previous session is null,
-          // start a focusing session.
-          if (prevStateSession === null) {
-            setDisabled(false);
-            return {
-              label: "Focusing",
-              timeRemaining: focusDuration * 60,
-            };
-          }
-          return prevStateSession;
-        });
-      }
-      return nextState;
-    });
-  }
+
 
   return (
     <div className="pomodoro">
@@ -151,7 +121,7 @@ function Pomodoro() {
                   "oi-media-play": !isTimerRunning,
                   "oi-media-pause": isTimerRunning,
                 })}
-              />Play/Pause
+              />
             </button>
             {/* TODO: Implement stopping the current focus or break session. and disable the stop button when there is no active session */}
             {/* TODO: Disable the stop button when there is no active session */}
@@ -164,7 +134,7 @@ function Pomodoro() {
               onClick={stop}
             >
               <span className="oi oi-media-stop" />
-              Stop
+              
             </button>
           </div>
         </div>
